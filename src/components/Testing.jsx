@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const baseURL = "https://rickandmortyapi.com/api/character";
+const baseURL = {
+  characters: "https://rickandmortyapi.com/api/character",
+  locations: "https://rickandmortyapi.com/api/location",
+  episodes: "https://rickandmortyapi.com/api/episode"
+};
 
 export default function Testing() {
   const [data, setData] = useState(null);
