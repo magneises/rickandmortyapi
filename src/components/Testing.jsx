@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import debounce from 'lodash.debounce'; // Import lodash debounce
 
 const baseURLs = {
   characters: "https://rickandmortyapi.com/api/character",
@@ -12,6 +14,8 @@ export default function Testing() {
   const [loading, setLoading] = useState(false);  // Track loading state
   const [error, setError] = useState(null);  // Track errors
   const [selectedType, setSelectedType] = useState('characters');  // To track selected type (characters, locations, episodes)
+  const [search, setSearch] = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
   const [nextPage, setNextPage] = useState(null);  // URL for the next page
   const [totalCount, setTotalCount] = useState(0);  // Total count of items (characters, locations, episodes)
 
@@ -27,24 +31,36 @@ export default function Testing() {
       })
       .catch(error => {
         setError(error);  // Set error if the request fails
-        setLoading(false);  // Set loading to false if there is an error
+        setLoading(false);
       });
   };
 
+  // This useEffect fetches data based on selectedType, search, and pageNumber
   useEffect(() => {
-    if (!selectedType) return;  // If no selection, do nothing
-    // Fetch the initial data based on the selected type
-    fetchData(baseURLs[selectedType]);
-  }, [selectedType]);  // Re-run effect when the selectedType changes
+    const url = `${baseURLs[selectedType]}?page=${pageNumber}&name=${search}`;
+    fetchData(url);  // Fetch the data when selectedType or search or pageNumber changes
+  }, [selectedType, search, pageNumber]);
 
   const handleSelectionChange = (e) => {
-    setSelectedType(e.target.value);  // Update the selected type based on user choice
+    setSelectedType(e.target.value);  // Change the selected type
   };
 
   const loadNextPage = () => {
     if (nextPage) {
       fetchData(nextPage);  // Fetch the next page of data
     }
+  };
+
+  // Create a debounced version of the search handler
+  const handleSearch = debounce((e) => {
+    setSearch(e.target.value);  // Update search query
+    setPageNumber(1);  // Reset to page 1 on search
+  }, 500); // Debounce delay set to 500ms
+
+  // Handle change in search field
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value); // Set search value immediately
+    handleSearch(e); // Call debounced function
   };
 
   if (loading) return <p>Loading...</p>;
@@ -54,26 +70,33 @@ export default function Testing() {
     <div>
       <h1>Rick and Morty API Data</h1>
 
-      {/* Dropdown to choose between characters, locations, and episodes */}
       <select onChange={handleSelectionChange} value={selectedType}>
         <option value="characters">Characters</option>
         <option value="locations">Locations</option>
         <option value="episodes">Episodes</option>
       </select>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-        {/* Display total count at the top right */}
-        <p>Total {selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}: {totalCount}</p>
-      </div>
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search..."
+        onChange={handleSearchChange} // Use handleSearchChange with immediate update and debounced call
+        value={search}
+      />
+      
+      {/* Total Count Display */}
+      <p>Total {selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}: {totalCount}</p>
 
+      {/* Data Rendering */}
       <div>
-        {/* Render data depending on what type is selected */}
         {selectedType === 'characters' && data && data.results && (
           <div>
             <h2>Characters</h2>
             {data.results.map(character => (
               <div key={character.id}>
-                <h3>{character.name}</h3>
+                <Link to={`/character/${character.id}`}>
+                  <h3>{character.name}</h3>
+                </Link>
                 <img src={character.image} alt={character.name} />
                 <p>Status: {character.status}</p>
                 <p>Species: {character.species}</p>
@@ -110,7 +133,7 @@ export default function Testing() {
         )}
       </div>
 
-      {/* Next Button to load more characters, locations, or episodes */}
+      {/* Pagination */}
       {nextPage && (
         <button onClick={loadNextPage}>Show More</button>
       )}

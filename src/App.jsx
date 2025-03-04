@@ -1,15 +1,17 @@
-import { useState } from 'react'
-import Testing from './components/Testing'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Testing from './components/Testing';
+import CardDetails from './components/CardDetails';
 
-function App() {
-  // const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <div>
-      <Testing />
-    </div>
-  )
-}
-
-export default App
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<Testing />} />
+          <Route path="/character/:id" element={<CardDetails />} />
+          {/* You can add additional routes for locations and episodes */}
+        </Routes>
+      </div>
+    </Router>
+  );
+};
