@@ -97,7 +97,8 @@ export default function Testing() {
               <div className="specificCard">
                 <div key={character.id}>
                   <Link to={`/character/${character.id}`}>
-                    <h3>{character.name}</h3>
+                    {/* <h3>{character.name}</h3> */}
+                    {character.name.length > 16 ? `${character.name.substring(0, 16)}...` : character.name}
                   </Link>
                   <img src={character.image} alt={character.name} />
                   <p>Status: {character.status}</p>
@@ -108,6 +109,8 @@ export default function Testing() {
             ))}
           </div>
         )}
+
+        
 
         {selectedType === 'locations' && data && data.results && (
           <div>
