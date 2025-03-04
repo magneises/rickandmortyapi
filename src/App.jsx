@@ -4,15 +4,16 @@ import "bootstrap/dist/js/bootstrap";
 import React, { useState, useEffect } from "react";
 import Testing from './components/Testing';
 import CardDetails from './components/CardDetails';
+import Nav from './components/Nav'; 
 
 export default function App() {
   return (
     <Router>
+      {/* <Nav /> */}
       <div>
         <Routes>
           <Route path="/" element={<Testing />} />
           <Route path="/character/:id" element={<CardDetails />} />
-          {/* You can add additional routes for locations and episodes */}
         </Routes>
       </div>
     </Router>

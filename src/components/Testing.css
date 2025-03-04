@@ -1,0 +1,30 @@
+
+body {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    background-color: yellow;
+}
+
+.resultsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: orange;
+    width: 90vw;
+}
+
+
+
+img {
+    width: 200px;
+    height: 200px;
+}
+
+.specificCard {
+    max-width: 200px;
+    text-align: center;
+    background-color: pink;
+}

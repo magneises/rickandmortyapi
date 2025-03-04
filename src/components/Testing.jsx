@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import debounce from 'lodash.debounce'; // Import lodash debounce
+import "../components/Testing.css"
 
 const baseURLs = {
   characters: "https://rickandmortyapi.com/api/character",
@@ -90,17 +91,19 @@ export default function Testing() {
       {/* Data Rendering */}
       <div>
         {selectedType === 'characters' && data && data.results && (
-          <div>
-            <h2>Characters</h2>
+          <div className="resultsList">
+            {/* <h2>Characters</h2> */}
             {data.results.map(character => (
-              <div key={character.id}>
-                <Link to={`/character/${character.id}`}>
-                  <h3>{character.name}</h3>
-                </Link>
-                <img src={character.image} alt={character.name} />
-                <p>Status: {character.status}</p>
-                <p>Species: {character.species}</p>
-                <p>Gender: {character.gender}</p>
+              <div className="specificCard">
+                <div key={character.id}>
+                  <Link to={`/character/${character.id}`}>
+                    <h3>{character.name}</h3>
+                  </Link>
+                  <img src={character.image} alt={character.name} />
+                  <p>Status: {character.status}</p>
+                  <p>Species: {character.species}</p>
+                  <p>Gender: {character.gender}</p>
+                </div>
               </div>
             ))}
           </div>

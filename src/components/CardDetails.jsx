@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import '../components/CardDetails.css';
+
 
 const CardDetails = () => {
   const { id } = useParams();  // Fetch the ID from the URL
@@ -19,7 +21,7 @@ const CardDetails = () => {
   if (!data) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className="cardDetails">
       <h1>{data.name}</h1>
       <img src={data.image} alt={data.name} />
       <p>Status: {data.status}</p>
